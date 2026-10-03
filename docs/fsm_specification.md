@@ -1,1 +1,1 @@
-<img src="/diagrams/fsm.svg" alt="FSM chart, opens in new tab" width="100%" />
+h<img src="/diagrams/fsm.svg" alt="FSM chart, opens in new tab" width="100%" height="100%"/>
