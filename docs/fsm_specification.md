@@ -1,1 +1,4 @@
-h<img src="/diagrams/fsm.svg" alt="FSM chart, opens in new tab" width="100%" height="100%"/>
+
+<div style="width: 100%; height: auto;">
+  <img src="/diagrams/fsm.svg" alt="FSM chart" style="width: 100%; height: auto;" />
+</div>
