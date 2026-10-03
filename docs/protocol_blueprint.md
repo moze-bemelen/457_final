@@ -43,5 +43,36 @@
   | STATE_UPDATE | SERVER -> CLIENTS | **STATE_UPDATE** is sent by server to both clients to update the game state which includes board, previous player moves shown graphically on board, and active player turn. |
   | ERROR | SERVER -> CLIENT | **ERROR** is sent to a client from the server when a player attempts to make a unauthorized or illegal move within the game. This includes out-of-turn moves, improper placement or a malformed message. |
   | DISCONNECT | CLIENT -> SERVER | **DISCONNECT** sent from client to server when a Client intentionally decides to disconnect or "quit" the game early. This will result in a graceful exit and closure of connection for both clients. |
-  | GAME_RESULT | SERVER -> CLIENTS | **GAME_RESULT** |
+  | GAME_RESULT | SERVER -> CLIENTS | **GAME_RESULT** Game result is broadcasted from the server to both clients to state the game has ended. Reports which player won or if it was a draw. |
   
+## Connection Termination & Socket Lifecycle Management
+  Design for graceful and abnormal connection terminations both client-side and server-side.
+  ### Transport-layer Termination and Application Disconnection
+   Upon the termination of the server through sock.close() after a client sends a **DISCONNECT** message at the application layer, the server will initiate a TCP 4-way FIN handshake to  
+   to gracefully end connection. The client's disconnect message will allow the server to notify the opponent player, declare a win by forfeit, and reclaim system resources.
+
+  ### Abrupt Termination
+   In the event of a TCP RST message or a hard drop, the next server attempt to read or write will trigger a TCP reset (RST) or timeout. To combat this, the moment a hard drop is 
+   sensed, the server will attempt to recuperate and gracefully end connection with the other client. 
+     
+  ### TCP EOF (0-byte) Rule
+   When a remote host closes its socket cleanly, the server will attempt a recv() call and receive 0 bytes instead of an exception. To ensure that there is no chance that
+   the socket recv() loop does not notice this and cause a infinite while loop, a conditional that checks for a 0-byte receipt will be implemented. In the event it is 
+   received the socket will immediately close connection with the client gracefully and move on to gracefully exiting connection with the other client.
+  
+  ### Socket Exceptions during Network Drops
+   | Exception | Handling |
+   | --- | --- |
+   | ConnectionResetError (TCP RST) | Peer host forcibly closed connection or crashed (HARD DROP) detailed above |
+   | BrokenPipeError (EPIPE) | Attempt to invoke sock.send() or sendall() to a closed socket. This exception will be caught and force a graceful termination of the game |
+   | TimeoutError | Socket timeout is hit and server will assume end of connection to begin gracefully exiting client connections |  
+  
+`  
+`    
+`   
+`       
+`    
+`       
+`     
+`
+### _The above design and blueprint for protocol function as well as FSM (Game State Machine) are subject to change through development._
