@@ -1,4 +1,4 @@
-'''mermaid  
+```mermaid  
 sequenceDiagram
     autonumber
     actor Client1 as Client 1 (Player X)
@@ -50,4 +50,4 @@ sequenceDiagram
             end
         end
     end
-'''
+
