@@ -29,6 +29,7 @@ sequenceDiagram
                     Server-->>Client1: STATE_UPDATE (Game-Board, Turn: Player 2)
                     Server-->>Client2: STATE_UPDATE (Game-Board, Turn: Player 2)
                     Note over Client2: Client2 accesses terminal to place game piece
+                    Client2 ->> Server: Place (col: 5)
                     Note over Server: Game continues until error or game end
                 end
             end
