@@ -34,5 +34,11 @@
   ![Sequence Diagram](https://github.com/moze-bemelen/457_final/blob/Main/docs/sequence_diagram.md)
 ## Score and Leaderboard Synchronization Design
 ### Score Broadcast Mechanism
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+  Score will be globally broadcast after each state change during gameplay. For sequential games played between two clients, i.e. __**Play again?**__ is selected at end of game, player
+  win counts will be maintained and broadcast at the end of each win, loss, draw, or game exit. As far as the specific game scores, Connect-4 does not have dynamic game scores and instead the 
+  score keeping relies heavily on player understanding of the game fundamentals. Of course it can be said that based off the specific pattern of a player's pieces across the game board, they 
+  may have a higher potential to win and this could be numerically represented by knowing all possible outcomes of the game step by step and classifying this using machine learning, that goes
+  far beyond the bounds of this project and instead will be left to players to determine. As far as this document reaches, game score will be kept solely to consecutive games played between two
+  ongoing clients. Score broadcasting carried out by the server will rely on blocking both sockets, waiting for a read event from each, and sending out said score data. Errors will be handled
+  internally during this exchange regarding clients attempting writes during this broadcast.
 
